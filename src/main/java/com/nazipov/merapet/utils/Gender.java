@@ -1,6 +1,6 @@
 package com.nazipov.merapet.utils;
 
-enum Gender {
+public enum Gender {
     MALE,
     FEMALE
 }
