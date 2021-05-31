@@ -9,8 +9,3 @@ public class MyUser {
     private final LocalDateTime dateOfBirth;
     private final Gender gender;
 }
-
-enum Gender {
-    MALE,
-    FEMALE
-}
