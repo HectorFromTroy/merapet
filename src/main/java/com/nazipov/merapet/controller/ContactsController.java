@@ -3,7 +3,9 @@ package com.nazipov.merapet.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class ContactsController {
     
     @GetMapping("/{userId}/contacts")
@@ -20,7 +22,7 @@ public class ContactsController {
 
     }
 
-    @DeleteMapping("/{userId}/contacts")
+    @DeleteMapping("/{userId}")
     public void deleteContacts(
         @PathVariable("userId") String userId
     ) {

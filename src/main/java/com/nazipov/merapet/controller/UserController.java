@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import reactor.core.publisher.Mono;
 
+@RestController
 public class UserController {
 
     @GetMapping("/users/{userId}")
@@ -22,14 +24,14 @@ public class UserController {
 
     // only admin, in future
     @GetMapping("/users/all")
-    public void retrieveUsers() {
-        
+    public String retrieveUsers() {
+        return "ssai";
     }
 
     @PostMapping("/users")
     public void createUser(
         @PathVariable("userId") String userId,
-        @Valid @RequestBody final Mono<UserInfo> contact
+        @Valid @RequestBody final Mono<UserInfo> user
     ) {
 
     }
