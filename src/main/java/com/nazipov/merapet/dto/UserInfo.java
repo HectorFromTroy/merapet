@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.nazipov.merapet.utils.Gender;
 
 public class UserInfo implements Serializable {
@@ -16,12 +19,13 @@ public class UserInfo implements Serializable {
     private LocalDateTime dateOfBirth;
     private Gender gender;
 
+    @JsonCreator(mode = Mode.PROPERTIES)
     public UserInfo(
-        String username,
-        String password,
-        String email,
-        LocalDateTime dateOfBirth,
-        Gender gender
+        @JsonProperty("username") String username,
+        @JsonProperty("password") String password,
+        @JsonProperty("email") String email,
+        @JsonProperty("dateOfBirth") LocalDateTime dateOfBirth,
+        @JsonProperty("gender") Gender gender
     ) {
         this.username = username;
         this.password = password;
