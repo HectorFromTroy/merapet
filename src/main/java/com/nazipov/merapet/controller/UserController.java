@@ -15,34 +15,34 @@ import reactor.core.publisher.Mono;
 
 public class UserController {
 
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}")
     public void retrieveUser(@PathVariable("userId") String userId) {
         
     }
 
-    @GetMapping("/{userId}/all")
-    public void retrieveUsers(@PathVariable("userId") String userId) {
+    @GetMapping("/users/all")
+    public void retrieveUsers() {
         
     }
 
-    @PostMapping("/{userId}")
-    public void addUser(
+    @PostMapping("/users")
+    public void createUser(
         @PathVariable("userId") String userId,
         @Valid @RequestBody final Mono<UserInfo> contact
     ) {
 
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/users/{userId}")
     public void editUser(
-        @PathVariable("userId") String userId,
+        @PathVariable("userId") String userId
     ) {
         
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/users/{userId}")
     public void deleteUser(
-        @PathVariable("userId") String userId,
+        @PathVariable("userId") String userId
     ) {
         
     }
