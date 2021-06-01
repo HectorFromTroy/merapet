@@ -7,6 +7,7 @@ import com.nazipov.merapet.utils.Gender;
 
 public class MyUser {
 
+    private String userId;
     private final String username;
     private final String password;
     private final String email;
@@ -25,6 +26,15 @@ public class MyUser {
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    // id will be injected while saving in Storage class
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -63,7 +73,9 @@ public class MyUser {
         if (!(obj instanceof MyUser))
             return false;
         MyUser other = (MyUser) obj;
-        return Objects.equals(username, other.username) && Objects.equals(email, other.email)
+        return Objects.equals(userId, other.userId)
+                && Objects.equals(username, other.username) 
+                && Objects.equals(email, other.email)
                 && Objects.equals(password, other.password)
                 && Objects.equals(dateOfBirth, other.dateOfBirth)
                 && Objects.equals(gender, other.gender);
@@ -75,7 +87,6 @@ public class MyUser {
     }
 
     public static final class Builder {
-
         private String username;
         private String password;
         private String email;
