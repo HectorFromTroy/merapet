@@ -20,6 +20,7 @@ public class UserController {
         
     }
 
+    // only admin, in future
     @GetMapping("/users/all")
     public void retrieveUsers() {
         
