@@ -1,5 +1,7 @@
 package com.nazipov.merapet.controller;
 
+import java.util.Arrays;
+
 import javax.validation.Valid;
 
 import com.nazipov.merapet.dto.UserInfo;
@@ -30,11 +32,14 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public void retrieveUser(@PathVariable("userId") String userId) {
-        
+    public Mono<MyUser> retrieveUser(@PathVariable("userId") String userId) {
+        return userService.retrieveUser(userId)
+            .onErrorResume(e -> {
+                logger.error(Arrays.toString(e.getStackTrace()));
+                return Mono.empty();
+            });
     }
 
-    // only admin, in future
     @GetMapping("/users/all")
     public String retrieveUsers() {
         return "ssai";
@@ -47,23 +52,28 @@ public class UserController {
         return user
             .map(UserMapper::mapToMyUserFromUserInfo)
             .flatMap(userService::saveUser).onErrorResume(e -> {
-                logger.error(e.toString());
+                logger.error(Arrays.toString(e.getStackTrace()));
                 return Mono.empty();
             });
     }
 
-    @PutMapping("/users/{userId}")
-    public void editUser(
-        @PathVariable("userId") String userId
+    @PutMapping("/users")
+    public Mono<MyUser> editUser(
+        @Valid @RequestBody final Mono<UserInfo> user
     ) {
-        
+        return user
+            .map(UserMapper::mapToMyUserFromUserInfo)
+            .flatMap(userService::editUser).onErrorResume(e -> {
+                logger.error(Arrays.toString(e.getStackTrace()));
+                return Mono.empty();
+            });
     }
 
     @DeleteMapping("/users/{userId}")
-    public void deleteUser(
+    public Mono<MyUser> deleteUser(
         @PathVariable("userId") String userId
     ) {
-        
+
     }
     
 }

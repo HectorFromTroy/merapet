@@ -6,6 +6,7 @@ import com.nazipov.merapet.entities.MyUser;
 public class UserMapper {
     public static MyUser mapToMyUserFromUserInfo(UserInfo userInfo) {
         return MyUser.builder()
+                    .setUserId(userInfo.getUserId())
                     .setUsername(userInfo.getUsername())
                     .setPassword(userInfo.getPassword())
                     .setEmail(userInfo.getEmail())

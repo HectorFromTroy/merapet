@@ -12,6 +12,7 @@ public class UserInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String userId;
     private String username;
     private String password;
     private String email;
@@ -20,17 +21,23 @@ public class UserInfo implements Serializable {
 
     @JsonCreator(mode = Mode.PROPERTIES)
     public UserInfo(
+        @JsonProperty("userId") String userId,
         @JsonProperty("username") String username,
         @JsonProperty("password") String password,
         @JsonProperty("email") String email,
         @JsonProperty("dateOfBirth") LocalDateTime dateOfBirth,
         @JsonProperty("gender") Gender gender
     ) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 
     public String getUsername() {
@@ -51,6 +58,10 @@ public class UserInfo implements Serializable {
 
     public Gender getGender() {
         return gender;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public void setUsername(String username) {

@@ -21,9 +21,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Mono<MyUser> retrieveUser(String userId) {
+        return Mono.just(storage.retrieveUser(userId))
+            .doOnEach(signal -> logger.info(String.format("Retrieved user with id: %s", userId)));
+    }
+
+    @Override
     public Mono<MyUser> saveUser(MyUser user) {
         return Mono.just(storage.saveUser(user))
-            .doOnEach(str -> logger.info(str.toString()));
+            .doOnEach(signal -> logger.info(String.format("Created new user: %s", user)));
+    }
+
+    @Override
+    public Mono<MyUser> editUser(MyUser user) {
+        return Mono.just(storage.editUser(user))
+            .doOnEach(signal -> logger.info(String.format("Edited user: %s", user)));
     }
     
 }

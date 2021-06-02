@@ -15,12 +15,14 @@ public class MyUser {
     private final Gender gender;
 
     public MyUser(
+        String userId,
         String username,
         String password,
         String email,
         LocalDateTime dateOfBirth,
         Gender gender
     ) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -86,6 +88,7 @@ public class MyUser {
     }
 
     public static final class Builder {
+        private String userId;
         private String username;
         private String password;
         private String email;
@@ -93,6 +96,11 @@ public class MyUser {
         private Gender gender;
 
         private Builder() {}
+
+        public Builder setUserId(String userId) {
+            this.userId = userId;
+            return this;
+        }
 
         public Builder setUsername(String username) {
             this.username = username;
@@ -120,7 +128,7 @@ public class MyUser {
         }
 
         public MyUser build() {
-            return new MyUser(username, password, email, dateOfBirth, gender);
+            return new MyUser(userId, username, password, email, dateOfBirth, gender);
         }
     }
 }
