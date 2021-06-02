@@ -31,12 +31,14 @@ public class Storage {
     }
 
     public MyUser saveUser(MyUser user) {
-        if (usernames.contains(user.getUsername())) {
+        String username = user.getUsername();
+        if (usernames.contains(username)) {
             throw new IllegalArgumentException();
         }
         String userId = getUUID();
         user.setUserId(userId);
         allUsersById.put(user.getUserId(), user);
+        usernames.add(username);
         return user;
     }
 
