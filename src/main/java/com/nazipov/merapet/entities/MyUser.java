@@ -73,11 +73,7 @@ public class MyUser {
         if (!(obj instanceof MyUser))
             return false;
         MyUser other = (MyUser) obj;
-        return Objects.equals(username, other.username) 
-                && Objects.equals(email, other.email)
-                && Objects.equals(password, other.password)
-                && Objects.equals(dateOfBirth, other.dateOfBirth)
-                && Objects.equals(gender, other.gender);
+        return Objects.equals(username, other.username);
     }
 
     @Override
