@@ -70,10 +70,14 @@ public class MyUser {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj.getClass() == MyUser.class)
+        if (obj.getClass() != MyUser.class)
             return false;
         MyUser other = (MyUser) obj;
-        return Objects.equals(username, other.username);
+        return Objects.equals(username, other.username) 
+            && Objects.equals(email, other.email)
+            && Objects.equals(password, other.password)
+            && Objects.equals(dateOfBirth, other.dateOfBirth)
+            && Objects.equals(gender, other.gender);
     }
 
     @Override
