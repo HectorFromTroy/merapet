@@ -22,11 +22,6 @@ public class Storage {
         return UUID.randomUUID().toString();
     }
 
-    private void putUser(MyUser user) {
-        allUsersByUsername.put(user.getUsername(), user);
-        allUsersById.put(user.getUserId(), user);
-    }
-
     public MyUser retrieveUser(String userId) {
         MyUser existingUser = allUsersById.get(userId);
         if (existingUser == null) {
