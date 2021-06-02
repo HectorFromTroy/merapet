@@ -3,7 +3,7 @@ package com.nazipov.merapet.entities;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import com.nazipov.merapet.utils.Gender;
+import com.nazipov.merapet.dto.Gender;
 
 public class MyUser {
 

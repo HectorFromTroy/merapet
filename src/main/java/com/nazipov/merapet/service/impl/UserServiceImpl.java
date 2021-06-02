@@ -8,6 +8,8 @@ import com.nazipov.merapet.storage.Storage;
 
 import org.springframework.stereotype.Service;
 
+import reactor.core.publisher.Mono;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -18,8 +20,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String saveUser(MyUser user) throws Exception {
-        return storage.saveUser(user);
+    public Mono<MyUser> saveUser(MyUser user) {
+        return Mono.just(storage.saveUser(user))
+            .doOnEach(System.out::println);
     }
     
 }

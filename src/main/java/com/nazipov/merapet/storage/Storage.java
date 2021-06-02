@@ -17,18 +17,17 @@ public class Storage {
         return UUID.randomUUID().toString();
     }
 
-    public String saveUser(MyUser user) throws Exception {
+    public MyUser saveUser(MyUser user) {
         if (usersContacts.entrySet().stream()
             .map(entry -> entry.getValue().get(entry.getKey()))
             .anyMatch(user::equals)
         ) {
             // user already exists
-            // TODO dedicated exception
-            throw new Exception();
+            throw new IllegalArgumentException();
         }
         String userId = getUUID();
         user.setUserId(userId);
         usersContacts.computeIfAbsent(userId, k -> new HashMap<>()).put(userId, user);
-        return userId;
+        return user;
     }
 }

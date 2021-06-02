@@ -3,6 +3,9 @@ package com.nazipov.merapet.controller;
 import javax.validation.Valid;
 
 import com.nazipov.merapet.dto.UserInfo;
+import com.nazipov.merapet.entities.MyUser;
+import com.nazipov.merapet.mapper.UserMapper;
+import com.nazipov.merapet.service.UserService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +20,12 @@ import reactor.core.publisher.Mono;
 @RestController
 public class UserController {
 
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping("/users/{userId}")
     public void retrieveUser(@PathVariable("userId") String userId) {
         
@@ -29,11 +38,15 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public void createUser(
-        @PathVariable("userId") String userId,
+    public Mono<MyUser> createUser(
         @Valid @RequestBody final Mono<UserInfo> user
     ) {
-
+        return user
+            .map(UserMapper::mapToMyUserFromUserInfo)
+            .flatMap(userService::saveUser).onErrorResume(e -> {
+                System.out.println("Error " + e);
+                return Mono.empty();
+            });
     }
 
     @PutMapping("/users/{userId}")

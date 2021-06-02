@@ -7,7 +7,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-import com.nazipov.merapet.utils.Gender;
 
 public class UserInfo implements Serializable {
 

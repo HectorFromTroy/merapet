@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import com.nazipov.merapet.entities.MyUser;
 
+import reactor.core.publisher.Mono;
+
 public interface UserService {
-    String saveUser(MyUser user) throws Exception;
+    Mono<MyUser> saveUser(MyUser user);
 }
