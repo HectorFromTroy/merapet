@@ -25,6 +25,7 @@ public class Storage {
     }
 
     public String saveUser(MyUser user) throws Exception {
+        // FIXME nested map
         if (users.values().stream().anyMatch(user::equals)) {
             // user already exists
             // TODO dedicated exception
