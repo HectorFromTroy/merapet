@@ -70,7 +70,7 @@ public class MyUser {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!(obj instanceof MyUser))
+        if (obj.getClass() == MyUser.class)
             return false;
         MyUser other = (MyUser) obj;
         return Objects.equals(username, other.username);

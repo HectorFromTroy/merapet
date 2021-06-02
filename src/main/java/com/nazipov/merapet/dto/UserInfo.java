@@ -82,7 +82,7 @@ public class UserInfo implements Serializable {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (!(obj instanceof UserInfo))
+        if (obj.getClass() == UserInfo.class)
             return false;
         UserInfo other = (UserInfo) obj;
         return Objects.equals(username, other.username);
