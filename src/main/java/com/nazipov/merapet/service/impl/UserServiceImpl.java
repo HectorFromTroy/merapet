@@ -18,8 +18,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String saveUser(MyUser user) throws Exception {
-        return storage.saveUser(user);
+    public Mono<String> saveUser(MyUser user) throws Exception {
+        return Mono.just(storage.saveUser(user));
     }
     
 }
