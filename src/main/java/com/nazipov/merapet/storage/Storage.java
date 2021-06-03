@@ -3,6 +3,7 @@ package com.nazipov.merapet.storage;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.nazipov.merapet.entities.MyUser;
@@ -23,12 +24,12 @@ public class Storage {
         return UUID.randomUUID().toString();
     }
 
-    public MyUser retrieveUser(String userId) {
-        MyUser existingUser = allUsersById.get(userId);
-        if (existingUser == null) {
-            throw new IllegalArgumentException("There is no such user :(((");
-        }
-        return existingUser;
+    public Optional<MyUser> retrieveUser(String userId) {
+        return Optional.ofNullable(allUsersById.get(userId));
+    }
+
+    public boolean isUserExist(String username) {
+        return usernames.contains(username);
     }
 
     public Collection<MyUser> retrieveUsers() {
@@ -36,34 +37,22 @@ public class Storage {
     }
 
     public MyUser saveUser(MyUser user) {
-        String username = user.getUsername();
-        if (usernames.contains(username)) {
-            throw new IllegalArgumentException();
-        }
         String userId = getUUID();
         user.setUserId(userId);
         allUsersById.put(user.getUserId(), user);
-        usernames.add(username);
+        usernames.add(user.getUsername());
         return user;
     }
 
     public MyUser editUser(MyUser user) {
-        MyUser existingUser = allUsersById.get(user.getUserId());
-        if (existingUser == null) {
-            throw new IllegalArgumentException();
-        }
         allUsersById.put(user.getUserId(), user);
         return user;
     }
 
-    public MyUser deleteUser(String userId) {
-        MyUser userToDelete = allUsersById.get(userId);
-        if (userToDelete == null) {
-            throw new IllegalArgumentException("There is no such user :(((");
-        }
-        allUsersById.remove(userId);
-        usernames.remove(userToDelete.getUsername());
-        return userToDelete;
+    public MyUser deleteUser(MyUser user) {
+        allUsersById.remove(user.getUserId());
+        usernames.remove(user.getUsername());
+        return user;
     }
 
 }
