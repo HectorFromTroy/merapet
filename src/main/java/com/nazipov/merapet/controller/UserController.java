@@ -1,6 +1,7 @@
 package com.nazipov.merapet.controller;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import javax.validation.Valid;
 
@@ -41,8 +42,12 @@ public class UserController {
     }
 
     @GetMapping("/users/all")
-    public String retrieveUsers() {
-        return "ssai";
+    public Mono<Collection<MyUser>> retrieveUsers() {
+        return userService.retrieveUsers()
+            .onErrorResume(e -> {
+                logger.error(Arrays.toString(e.getStackTrace()));
+                return Mono.empty();
+            });
     }
 
     @PostMapping("/users")
@@ -73,7 +78,11 @@ public class UserController {
     public Mono<MyUser> deleteUser(
         @PathVariable("userId") String userId
     ) {
-
+        return userService.deleteUser(userId)
+            .onErrorResume(e -> {
+                logger.error(Arrays.toString(e.getStackTrace()));
+                return Mono.empty();
+            });
     }
     
 }

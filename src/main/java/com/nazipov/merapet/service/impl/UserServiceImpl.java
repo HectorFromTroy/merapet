@@ -1,5 +1,7 @@
 package com.nazipov.merapet.service.impl;
 
+import java.util.Collection;
+
 import com.nazipov.merapet.entities.MyUser;
 import com.nazipov.merapet.service.UserService;
 import com.nazipov.merapet.storage.Storage;
@@ -22,8 +24,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<MyUser> retrieveUser(String userId) {
+        // error emitted here doesn't get captured :(
         return Mono.just(storage.retrieveUser(userId))
             .doOnNext(signal -> logger.info(String.format("Retrieved user with id: %s", userId)));
+    }
+
+    @Override
+    public Mono<Collection<MyUser>> retrieveUsers() {
+        return Mono.just(storage.retrieveUsers())
+            .doOnNext(signal -> logger.info("Retrieved all users"));
     }
 
     @Override
@@ -36,6 +45,12 @@ public class UserServiceImpl implements UserService {
     public Mono<MyUser> editUser(MyUser user) {
         return Mono.just(storage.editUser(user))
             .doOnNext(signal -> logger.info(String.format("Edited user: %s", user)));
+    }
+
+    @Override
+    public Mono<MyUser> deleteUser(String userId) {
+        return Mono.just(storage.deleteUser(userId))
+            .doOnNext(signal -> logger.info(String.format("Deleted user: %s", userId)));
     }
     
 }

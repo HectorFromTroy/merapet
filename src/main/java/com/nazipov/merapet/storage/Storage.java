@@ -1,5 +1,6 @@
 package com.nazipov.merapet.storage;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.UUID;
@@ -30,6 +31,10 @@ public class Storage {
         return existingUser;
     }
 
+    public Collection<MyUser> retrieveUsers() {
+        return allUsersById.values();
+    }
+
     public MyUser saveUser(MyUser user) {
         String username = user.getUsername();
         if (usernames.contains(username)) {
@@ -49,6 +54,16 @@ public class Storage {
         }
         allUsersById.put(user.getUserId(), user);
         return user;
+    }
+
+    public MyUser deleteUser(String userId) {
+        MyUser userToDelete = allUsersById.get(userId);
+        if (userToDelete == null) {
+            throw new IllegalArgumentException("There is no such user :(((");
+        }
+        allUsersById.remove(userId);
+        usernames.remove(userToDelete.getUsername());
+        return userToDelete;
     }
 
 }
