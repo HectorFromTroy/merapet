@@ -1,11 +1,14 @@
 package com.nazipov.merapet.storage;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
+import com.nazipov.merapet.dto.Gender;
 import com.nazipov.merapet.entities.MyUser;
 
 import org.springframework.stereotype.Component;
@@ -17,7 +20,32 @@ public class Storage {
 
     private HashMap<String, MyUser> allUsersById = new HashMap<>();
     private HashSet<String> usernames = new HashSet<>();
-    private HashMap<String, HashSet<String>> userContacts = new HashMap<>();
+    private HashMap<String, Set<String>> userContacts = new HashMap<>();
+
+    Storage() {
+        // testing users and contacts
+        MyUser user = saveUser(
+            MyUser.builder()
+                .setUsername("username")
+                .setEmail("qweqwe@mail.ru")
+                .setDateOfBirth(LocalDateTime.now())
+                .setPassword("password")
+                .setGender(Gender.FEMALE)
+                .build()
+        );
+        usernames.add(user.getUsername());
+        MyUser contact = saveUser(
+            MyUser.builder()
+                .setUsername("contact")
+                .setEmail("vcvbcvbcvb@mail.ru")
+                .setDateOfBirth(LocalDateTime.now())
+                .setPassword("vbbvbdvb")
+                .setGender(Gender.MALE)
+                .build()
+        );
+        usernames.add(contact.getUsername());
+        userContacts.put(user.getUserId(), Set.of(contact.getUserId()));
+    }
 
 
     private String getUUID() {

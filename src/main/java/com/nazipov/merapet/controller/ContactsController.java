@@ -1,9 +1,16 @@
 package com.nazipov.merapet.controller;
 
+import javax.validation.Valid;
+
+import com.nazipov.merapet.entities.MyUser;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import reactor.core.publisher.Mono;
 
 @RestController
 public class ContactsController {
@@ -13,17 +20,16 @@ public class ContactsController {
         
     }
 
-    // Array of contacts (can be arr of 1 elem)
     @PostMapping("/{userId}/contacts")
-    public void addContacts(
-        @PathVariable("userId") String userId
-        // TODO
+    public void addContact(
+        @PathVariable("userId") String userId,
+        @Valid @RequestBody final Mono<MyUser> contact
     ) {
 
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteContacts(
+    public void deleteContact(
         @PathVariable("userId") String userId
     ) {
         
