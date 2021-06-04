@@ -2,6 +2,7 @@ package com.nazipov.merapet.controller;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -43,7 +44,7 @@ public class ContactsController {
             });
     }
 
-    @PostMapping("/{userId}/contacts")
+    @PostMapping("/{userId}/contact")
     public Mono<Contact> addContact(
         @PathVariable("userId") String userId,
         @Valid @RequestBody final Mono<ContactInfo> contact
@@ -56,7 +57,20 @@ public class ContactsController {
             });
     }
 
-    @PutMapping("/{userId}/contacts")
+    @PostMapping("/{userId}/contacts")
+    public Mono<List<Contact>> addContacts(
+        @PathVariable("userId") String userId,
+        @Valid @RequestBody final Mono<List<ContactInfo>> contactsList
+    ) {
+        return contactsList
+            .map(ContactMapper::mapToContactFromContactInfo)
+            .flatMap(conts -> contactsService.addContacts(userId, conts)).onErrorResume(e -> {
+                logger.error(LoggingStrings.errorString(e));
+                return Mono.empty();
+            });
+    }
+
+    @PutMapping("/{userId}/contact")
     public Mono<Contact> editContact(
         @PathVariable("userId") String userId,
         @Valid @RequestBody final Mono<ContactInfo> contact
@@ -69,7 +83,20 @@ public class ContactsController {
             });
     }
 
-    @DeleteMapping("/{userId}/contacts")
+    @PutMapping("/{userId}/contacts")
+    public Mono<List<Contact>> editContacts(
+        @PathVariable("userId") String userId,
+        @Valid @RequestBody final Mono<List<ContactInfo>> contactsList
+    ) {
+        return contactsList
+            .map(ContactMapper::mapToContactFromContactInfo)
+            .flatMap(conts -> contactsService.editContacts(userId, conts)).onErrorResume(e -> {
+                logger.error(LoggingStrings.errorString(e));
+                return Mono.empty();
+            });
+    }
+
+    @DeleteMapping("/{userId}/contact")
     public Mono<Contact> deleteContact(
         @PathVariable("userId") String userId,
         @Valid @RequestBody final Mono<ContactInfo> contact
@@ -77,6 +104,19 @@ public class ContactsController {
         return contact
             .map(ContactMapper::mapToContactFromContactInfo)
             .flatMap(cont -> contactsService.deleteContact(userId, cont)).onErrorResume(e -> {
+                logger.error(LoggingStrings.errorString(e));
+                return Mono.empty();
+            });
+    }
+
+    @DeleteMapping("/{userId}/contacts")
+    public Mono<List<Contact>> deleteContacts(
+        @PathVariable("userId") String userId,
+        @Valid @RequestBody final Mono<List<ContactInfo>> contactsList
+    ) {
+        return contactsList
+            .map(ContactMapper::mapToContactFromContactInfo)
+            .flatMap(conts -> contactsService.deleteContacts(userId, conts)).onErrorResume(e -> {
                 logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
