@@ -5,9 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import com.nazipov.merapet.dto.Gender;
@@ -23,7 +21,7 @@ public class Storage {
 
     private HashMap<String, MyUser> allUsersById = new HashMap<>();
     private HashSet<String> usernames = new HashSet<>();
-    // user owner id, contact id, contact name
+    // user owner id, contact id, contact
     private HashMap<String, HashMap<String, Contact>> userContacts = new HashMap<>();
 
     Storage() {

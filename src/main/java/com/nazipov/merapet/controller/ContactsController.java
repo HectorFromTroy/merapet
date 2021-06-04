@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import com.nazipov.merapet.dto.ContactInfo;
 import com.nazipov.merapet.entities.Contact;
 import com.nazipov.merapet.entities.MyUser;
+import com.nazipov.merapet.logging.LoggingStrings;
 import com.nazipov.merapet.mapper.ContactMapper;
 import com.nazipov.merapet.service.ContactsService;
 
@@ -37,7 +38,7 @@ public class ContactsController {
     public Mono<Collection<Contact>> retrieveContacts(@PathVariable("userId") String userId) {
         return contactsService.retrieveContacts(userId)
             .onErrorResume(e -> {
-                logger.error(Arrays.toString(e.getStackTrace()));
+                logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
     }
@@ -50,7 +51,7 @@ public class ContactsController {
         return contact
             .map(ContactMapper::mapToContactFromContactInfo)
             .flatMap(cont -> contactsService.addContact(userId, cont)).onErrorResume(e -> {
-                logger.error(Arrays.toString(e.getStackTrace()));
+                logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
     }
@@ -63,7 +64,7 @@ public class ContactsController {
         return contact
             .map(ContactMapper::mapToContactFromContactInfo)
             .flatMap(cont -> contactsService.editContact(userId, cont)).onErrorResume(e -> {
-                logger.error(Arrays.toString(e.getStackTrace()));
+                logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
     }
@@ -75,7 +76,7 @@ public class ContactsController {
     ) {
         return contactsService.deleteContact(userId, contactId)
             .onErrorResume(e -> {
-                logger.error(Arrays.toString(e.getStackTrace()));
+                logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
     }

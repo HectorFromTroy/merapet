@@ -23,12 +23,15 @@ public class UserServiceImpl implements UserService {
         this.storage = storage;
     }
 
+    private Mono<MyUser> monoErrorNoSuchUser(String userId) {
+        return Mono.error(new IllegalArgumentException(String.format("There is no user: '%s'", userId)));
+    }
+
     @Override
     public Mono<MyUser> retrieveUser(String userId) {
         Optional<MyUser> retrievedUser = storage.retrieveUser(userId);
         if (retrievedUser.isEmpty()) {
-            // TODO Mono.error
-            throw new IllegalArgumentException("There is no such user :(((");
+            return monoErrorNoSuchUser(userId);
         }
         return Mono.just(retrievedUser.get())
             .doOnNext(signal -> logger.info(String.format("Retrieved user with id: %s", userId)));
@@ -43,8 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<MyUser> saveUser(MyUser user) {
         if (storage.isUserExist(user.getUsername())) {
-            // TODO Mono.error
-            throw new IllegalArgumentException();
+            return Mono.error(new IllegalArgumentException());
         }
         return Mono.just(storage.saveUser(user))
             .doOnNext(signal -> logger.info(String.format("Created new user: %s", user)));
@@ -52,10 +54,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<MyUser> editUser(MyUser user) {
-        Optional<MyUser> existingUser = storage.retrieveUser(user.getUserId());
+        String userId = user.getUserId();
+        Optional<MyUser> existingUser = storage.retrieveUser(userId);
         if (existingUser.isEmpty()) {
-            // TODO Mono.error
-            throw new IllegalArgumentException("There is no such user :(((");
+            return monoErrorNoSuchUser(userId);
         }
         return Mono.just(storage.editUser(user))
             .doOnNext(signal -> logger.info(String.format("Edited user: %s", user)));
@@ -65,8 +67,7 @@ public class UserServiceImpl implements UserService {
     public Mono<MyUser> deleteUser(String userId) {
         Optional<MyUser> userToDelete = storage.retrieveUser(userId);
         if (userToDelete.isEmpty()) {
-            // TODO Mono.error
-            throw new IllegalArgumentException("There is no such user :(((");
+            return monoErrorNoSuchUser(userId);
         }
         return Mono.just(storage.deleteUser(userToDelete.get()))
             .doOnNext(signal -> logger.info(String.format("Deleted user: %s", userId)));

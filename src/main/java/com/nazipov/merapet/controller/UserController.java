@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import com.nazipov.merapet.dto.UserInfo;
 import com.nazipov.merapet.entities.MyUser;
+import com.nazipov.merapet.logging.LoggingStrings;
 import com.nazipov.merapet.mapper.UserMapper;
 import com.nazipov.merapet.service.UserService;
 
@@ -36,7 +37,7 @@ public class UserController {
     public Mono<MyUser> retrieveUser(@PathVariable("userId") String userId) {
         return userService.retrieveUser(userId)
             .onErrorResume(e -> {
-                logger.error(Arrays.toString(e.getStackTrace()));
+                logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
     }
@@ -45,7 +46,7 @@ public class UserController {
     public Mono<Collection<MyUser>> retrieveUsers() {
         return userService.retrieveUsers()
             .onErrorResume(e -> {
-                logger.error(Arrays.toString(e.getStackTrace()));
+                logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
     }
@@ -57,7 +58,7 @@ public class UserController {
         return user
             .map(UserMapper::mapToMyUserFromUserInfo)
             .flatMap(userService::saveUser).onErrorResume(e -> {
-                logger.error(Arrays.toString(e.getStackTrace()));
+                logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
     }
@@ -69,7 +70,7 @@ public class UserController {
         return user
             .map(UserMapper::mapToMyUserFromUserInfo)
             .flatMap(userService::editUser).onErrorResume(e -> {
-                logger.error(Arrays.toString(e.getStackTrace()));
+                logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
     }
@@ -80,7 +81,7 @@ public class UserController {
     ) {
         return userService.deleteUser(userId)
             .onErrorResume(e -> {
-                logger.error(Arrays.toString(e.getStackTrace()));
+                logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
     }
