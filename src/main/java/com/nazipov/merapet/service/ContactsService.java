@@ -10,5 +10,5 @@ public interface ContactsService {
     Mono<Collection<Contact>> retrieveContacts(String userId);
     Mono<Contact> addContact(String userId, Contact contact);
     Mono<Contact> editContact(String userId, Contact contact);
-    Mono<Contact> deleteContact(String userId, String contactId);
+    Mono<Contact> deleteContact(String userId, Contact contact);
 }

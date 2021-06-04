@@ -45,7 +45,6 @@ public class ContactsServiceImpl implements ContactsService {
     public Mono<Contact> editContact(String userId, Contact contact) {
         String contactId = contact.getContactId();
         if (!storage.hasContact(userId, contactId)) {
-            //TODO DRY
             return Mono.error(new IllegalArgumentException(String.format("User: %s%n don't have contact: %s", userId, contactId)));
         }
         return Mono.just(storage.editContact(userId, contact))
@@ -58,19 +57,18 @@ public class ContactsServiceImpl implements ContactsService {
     }
 
     @Override
-    public Mono<Contact> deleteContact(String userId, String contactId) {
+    public Mono<Contact> deleteContact(String userId, Contact contact) {
         Optional<MyUser> user = storage.retrieveUser(userId);
         if (user.isEmpty()) {
-            //TODO DRY
             return Mono.error(new IllegalArgumentException(String.format("User: %s doesn't exist", userId)));
         }
         
-        Optional<Contact> contact = storage.retrieveContact(userId, contactId);
-        if (contact.isEmpty()) {
+        String contactId = contact.getContactId();
+        if (!storage.hasContact(userId, contactId)) {
             return Mono.error(new IllegalArgumentException(String.format("User: %s%n don't have contact: %s", userId, contactId)));
         }
-        storage.deleteContact(userId, contactId);
-        return Mono.just(contact.get())
+        
+        return Mono.just(storage.deleteContact(userId, contactId))
             .doOnNext(c -> logger.info(String.format("Deleted contact: %s with name: '%s' for user: %s", 
                     c.getUserId(), 
                     c.getName(), 

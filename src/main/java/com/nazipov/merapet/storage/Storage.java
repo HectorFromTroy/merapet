@@ -120,8 +120,8 @@ public class Storage {
         return contact;
     }
 
-    public void deleteContact(String userId, String contactId) {
-        userContacts.get(userId).remove(contactId);
+    public Contact deleteContact(String userId, String contactId) {
+        return userContacts.get(userId).remove(contactId);
     }
 
 }
