@@ -4,6 +4,9 @@ import com.nazipov.merapet.dto.UserInfo;
 import com.nazipov.merapet.entities.MyUser;
 
 public class UserMapper {
+
+    private UserMapper() {}
+
     public static MyUser mapToMyUserFromUserInfo(UserInfo userInfo) {
         return MyUser.builder()
                     .setUserId(userInfo.getUserId())

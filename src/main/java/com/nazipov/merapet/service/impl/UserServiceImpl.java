@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     public Mono<MyUser> retrieveUser(String userId) {
         Optional<MyUser> retrievedUser = storage.retrieveUser(userId);
         if (retrievedUser.isEmpty()) {
-            // error emitted here doesn't get captured :(
+            // TODO Mono.error
             throw new IllegalArgumentException("There is no such user :(((");
         }
         return Mono.just(retrievedUser.get())
@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<MyUser> saveUser(MyUser user) {
         if (storage.isUserExist(user.getUsername())) {
+            // TODO Mono.error
             throw new IllegalArgumentException();
         }
         return Mono.just(storage.saveUser(user))
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
     public Mono<MyUser> editUser(MyUser user) {
         Optional<MyUser> existingUser = storage.retrieveUser(user.getUserId());
         if (existingUser.isEmpty()) {
+            // TODO Mono.error
             throw new IllegalArgumentException("There is no such user :(((");
         }
         return Mono.just(storage.editUser(user))
@@ -63,6 +65,7 @@ public class UserServiceImpl implements UserService {
     public Mono<MyUser> deleteUser(String userId) {
         Optional<MyUser> userToDelete = storage.retrieveUser(userId);
         if (userToDelete.isEmpty()) {
+            // TODO Mono.error
             throw new IllegalArgumentException("There is no such user :(((");
         }
         return Mono.just(storage.deleteUser(userToDelete.get()))
