@@ -84,7 +84,7 @@ public class UserControllerTest {
             .exchange()
             .expectStatus().isOk()
             .expectBody(List.class)
-            .value(usersList -> usersList.size(), equalTo(1));
+            .value(usersList -> usersList.size(), equalTo(allUserToRetrieve.size()));
     }
 
     @Test
