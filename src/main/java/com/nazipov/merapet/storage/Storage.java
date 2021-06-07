@@ -12,7 +12,7 @@ import com.nazipov.merapet.dto.Gender;
 import com.nazipov.merapet.entities.Contact;
 import com.nazipov.merapet.entities.MyUser;
 
-import org.springframework.stereotype.Component;
+import org.graalvm.compiler.lir.CompositeValue.Component;
 
 @Component
 public class Storage {
@@ -64,7 +64,11 @@ public class Storage {
         return UUID.randomUUID().toString();
     }
 
-    public boolean isUserExist(String username) {
+    public boolean isUserExistById(String userId) {
+        return allUsersById.containsKey(userId);
+    }
+
+    public boolean isUserExistByUsername(String username) {
         return usernames.contains(username);
     }
 

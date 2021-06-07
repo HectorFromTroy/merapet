@@ -7,7 +7,6 @@ import com.nazipov.merapet.entities.MyUser;
 import com.nazipov.merapet.service.UserService;
 import com.nazipov.merapet.storage.Storage;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<MyUser> saveUser(MyUser user) {
-        if (storage.isUserExist(user.getUsername())) {
+        if (storage.isUserExistByUsername(user.getUsername())) {
             return Mono.error(new IllegalArgumentException());
         }
         return Mono.just(storage.saveUser(user))
