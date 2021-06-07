@@ -96,27 +96,25 @@ public class ContactsController {
             });
     }
 
-    @DeleteMapping("/{userId}/contact")
+    @DeleteMapping("/{userId}/contact/{contactId}")
     public Mono<Contact> deleteContact(
         @PathVariable("userId") String userId,
-        @Valid @RequestBody final Mono<ContactInfo> contact
+        @PathVariable("contactId") String contactId
     ) {
-        return contact
-            .map(ContactMapper::mapToContactFromContactInfo)
-            .flatMap(cont -> contactsService.deleteContact(userId, cont)).onErrorResume(e -> {
+        return contactsService.deleteContact(userId, contactId)
+            .onErrorResume(e -> {
                 logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });
     }
 
-    @DeleteMapping("/{userId}/contacts")
+    @DeleteMapping("/{userId}/contacts/{contactIds}")
     public Mono<List<Contact>> deleteContacts(
         @PathVariable("userId") String userId,
-        @Valid @RequestBody final Mono<List<ContactInfo>> contactsList
+        @PathVariable("contactIds") List<String> contactIds
     ) {
-        return contactsList
-            .map(ContactMapper::mapToContactFromContactInfo)
-            .flatMap(conts -> contactsService.deleteContacts(userId, conts)).onErrorResume(e -> {
+        return contactsService.deleteContacts(userId, contactIds)
+            .onErrorResume(e -> {
                 logger.error(LoggingStrings.errorString(e));
                 return Mono.empty();
             });

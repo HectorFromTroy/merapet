@@ -13,6 +13,6 @@ public interface ContactsService {
     Mono<List<Contact>> addContacts(String userId, List<Contact> contacts);
     Mono<Contact> editContact(String userId, Contact contact);
     Mono<List<Contact>> editContacts(String userId, List<Contact> contacts);
-    Mono<Contact> deleteContact(String userId, Contact contact);
-    Mono<List<Contact>> deleteContacts(String userId, List<Contact> contacts);
+    Mono<Contact> deleteContact(String userId, String contactId);
+    Mono<List<Contact>> deleteContacts(String userId, List<String> contactIds);
 }
