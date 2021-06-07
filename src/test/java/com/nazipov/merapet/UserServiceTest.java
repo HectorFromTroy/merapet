@@ -1,6 +1,10 @@
 package com.nazipov.merapet;
 
+import static org.mockito.Mockito.when;
+
+import com.nazipov.merapet.entities.MyUser;
 import com.nazipov.merapet.service.UserService;
+import com.nazipov.merapet.service.impl.UserServiceImpl;
 import com.nazipov.merapet.storage.Storage;
 
 import org.junit.jupiter.api.Test;
@@ -21,7 +25,9 @@ public class UserServiceTest {
     
     @Test
     public void testUserRetrieving() {
-
+        MyUser userToRetrieve = 
+        userService = new UserServiceImpl(storage);
+        when(storage.retrieveUser())
     }
 
 }

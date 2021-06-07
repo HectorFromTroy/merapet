@@ -13,36 +13,25 @@ import com.nazipov.merapet.entities.MyUser;
 import com.nazipov.merapet.mapper.UserMapper;
 import com.nazipov.merapet.service.UserService;
 
-import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import reactor.core.publisher.Mono;
 
 @AutoConfigureWebTestClient(timeout = "10000")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class UserControllerTest {
-
-    private EasyRandom generator = new EasyRandom();
+public class UserControllerTest extends BaseTest {
 
     @Autowired
     private WebTestClient webTestClient;
 
-    @SpyBean
+    @MockBean
     private UserService userService;
-
-    public UserInfo generateUserInfo() {
-        return generator.nextObject(UserInfo.class);
-    }
-
-    public MyUser generateUser() {
-        return generator.nextObject(MyUser.class);
-    }
     
     @Test
     public void testCorrectUserCreating() throws JsonProcessingException {
