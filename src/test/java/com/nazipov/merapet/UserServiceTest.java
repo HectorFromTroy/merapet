@@ -71,7 +71,7 @@ public class UserServiceTest extends BaseTest {
     public void testExistingUserSaving() {
         MyUser userToSave = generateUser();
         userService = new UserServiceImpl(storage);
-        when(storage.isUserExist(userToSave.getUsername())).thenReturn(true);
+        when(storage.isUserExistByUsername(userToSave.getUsername())).thenReturn(true);
         StepVerifier.create(userService.saveUser(userToSave))
             .expectError(IllegalArgumentException.class)
             .verify();

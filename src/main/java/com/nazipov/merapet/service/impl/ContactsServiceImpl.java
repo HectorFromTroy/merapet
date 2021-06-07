@@ -35,6 +35,7 @@ public class ContactsServiceImpl implements ContactsService {
 
     @Override
     public Mono<Contact> addContact(String userId, Contact contact) {
+        //TODO checking contact user existence
         if (!storage.isUserExistById(userId)) {
             return Mono.error(new IllegalArgumentException(String.format("There is no user: '%s'", userId)));
         }
@@ -49,9 +50,6 @@ public class ContactsServiceImpl implements ContactsService {
 
     @Override
     public Mono<List<Contact>> addContacts(String userId, List<Contact> contacts) {
-        if (!storage.isUserExistById(userId)) {
-            return Mono.error(new IllegalArgumentException(String.format("There is no user: '%s'", userId)));
-        }
         return Flux.fromIterable(contacts)
                 .flatMap(c -> addContact(userId, c))
                 .collectList()
@@ -78,9 +76,6 @@ public class ContactsServiceImpl implements ContactsService {
 
     @Override
     public Mono<List<Contact>> editContacts(String userId, List<Contact> contacts) {
-        if (!storage.isUserExistById(userId)) {
-            return Mono.error(new IllegalArgumentException(String.format("There is no user: '%s'", userId)));
-        }
         return Flux.fromIterable(contacts)
                 .flatMap(c -> editContact(userId, c))
                 .collectList()
