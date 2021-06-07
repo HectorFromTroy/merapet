@@ -2,10 +2,8 @@ package com.nazipov.merapet.service.impl;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import com.nazipov.merapet.entities.Contact;
-import com.nazipov.merapet.entities.MyUser;
 import com.nazipov.merapet.service.ContactsService;
 import com.nazipov.merapet.storage.Storage;
 
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.MonoOperator;
 
 @Service
 public class ContactsServiceImpl implements ContactsService {
@@ -91,12 +88,11 @@ public class ContactsServiceImpl implements ContactsService {
     }
 
     @Override
-    public Mono<Contact> deleteContact(String userId, Contact contact) {
+    public Mono<Contact> deleteContact(String userId, String contactId) {
         if (!storage.isUserExistById(userId)) {
             return Mono.error(new IllegalArgumentException(String.format("There is no user: '%s'", userId)));
         }
         
-        String contactId = contact.getContactId();
         if (!storage.hasContact(userId, contactId)) {
             return Mono.error(new IllegalArgumentException(String.format("User: %s%n don't have contact: %s", userId, contactId)));
         }
@@ -111,14 +107,14 @@ public class ContactsServiceImpl implements ContactsService {
     }
 
     @Override
-    public Mono<List<Contact>> deleteContacts(String userId, List<Contact> contacts) {
+    public Mono<List<Contact>> deleteContacts(String userId, List<String> contactIds) {
         if (!storage.isUserExistById(userId)) {
             return Mono.error(new IllegalArgumentException(String.format("There is no user: '%s'", userId)));
         }
-        return Flux.fromIterable(contacts)
+        return Flux.fromIterable(contactIds)
                 .flatMap(c -> deleteContact(userId, c))
                 .collectList()
-                .doOnNext(c -> logger.info(String.format("Deleted list of contacts %s%n for user: '%s'", contacts, userId)));
+                .doOnNext(c -> logger.info(String.format("Deleted list of contacts %s%n for user: '%s'", contactIds, userId)));
     }
 
 }

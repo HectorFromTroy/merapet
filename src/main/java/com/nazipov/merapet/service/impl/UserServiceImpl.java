@@ -7,6 +7,7 @@ import com.nazipov.merapet.entities.MyUser;
 import com.nazipov.merapet.service.UserService;
 import com.nazipov.merapet.storage.Storage;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 

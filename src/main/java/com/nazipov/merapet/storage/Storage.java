@@ -12,7 +12,7 @@ import com.nazipov.merapet.dto.Gender;
 import com.nazipov.merapet.entities.Contact;
 import com.nazipov.merapet.entities.MyUser;
 
-import org.graalvm.compiler.lir.CompositeValue.Component;
+import org.springframework.stereotype.Component;
 
 @Component
 public class Storage {
