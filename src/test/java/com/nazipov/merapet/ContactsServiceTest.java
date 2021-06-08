@@ -1,11 +1,13 @@
 package com.nazipov.merapet;
 
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.List;
-import java.util.Optional;
 
-import com.nazipov.merapet.dto.ContactInfo;
 import com.nazipov.merapet.entities.Contact;
 import com.nazipov.merapet.service.impl.ContactsServiceImpl;
 import com.nazipov.merapet.storage.Storage;
@@ -56,14 +58,14 @@ public class ContactsServiceTest extends BaseTest {
         Contact contactToAdd = generateContact();
         contactsService = new ContactsServiceImpl(storage);
         when(storage.isUserExistById(mockUserId)).thenReturn(true);
-
         when(storage.saveContact(mockUserId, contactToAdd)).thenReturn(contactToAdd);
+
         StepVerifier.create(contactsService.addContact(mockUserId, contactToAdd))
             .assertNext(elem -> System.out.println("Next: " + elem))
             .verifyComplete();
 
         List<Contact> contactsToAdd = List.of(contactToAdd);
-        when(storage.saveContact(mockUserId, contactToAdd)).thenReturn(contactToAdd);
+        verify(storage, times(contactsToAdd.size())).saveContact(eq(mockUserId), any(Contact.class));
         StepVerifier.create(contactsService.addContacts(mockUserId, contactsToAdd))
             .expectNextMatches(contacts -> contacts.size() == contactsToAdd.size())
             .verifyComplete();
@@ -81,7 +83,6 @@ public class ContactsServiceTest extends BaseTest {
             .verify();
 
         List<Contact> contactsToAdd = List.of(contactToAdd);
-        when(storage.saveContact(mockUserId, contactToAdd)).thenReturn(contactToAdd);
         StepVerifier.create(contactsService.addContacts(mockUserId, contactsToAdd))
             .expectError(IllegalArgumentException.class)
             .verify();
@@ -100,6 +101,7 @@ public class ContactsServiceTest extends BaseTest {
             .verifyComplete();
 
         List<Contact> contactsToEdit = List.of(contactToEdit);
+        verify(storage, times(contactsToEdit.size())).editContact(eq(mockUserId), any(Contact.class));
         StepVerifier.create(contactsService.editContacts(mockUserId, contactsToEdit))
             .expectNextMatches(contacts -> contacts.size() == contactsToEdit.size())
             .verifyComplete();
