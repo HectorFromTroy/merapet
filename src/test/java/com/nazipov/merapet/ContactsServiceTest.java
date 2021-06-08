@@ -12,7 +12,9 @@ import com.nazipov.merapet.entities.Contact;
 import com.nazipov.merapet.service.impl.ContactsServiceImpl;
 import com.nazipov.merapet.storage.Storage;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,10 +24,10 @@ import reactor.test.StepVerifier;
 
 @AutoConfigureWebTestClient(timeout = "10000")
 @SpringBootTest(classes = ContactsServiceImpl.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContactsServiceTest extends BaseTest {
 
     @SpyBean
-    // TODO
     private ContactsServiceImpl contactsService;
 
     @MockBean
@@ -33,10 +35,14 @@ public class ContactsServiceTest extends BaseTest {
 
     private String mockUserId = "qwe";
 
+    @BeforeAll
+    public void setUp() {
+        contactsService = new ContactsServiceImpl(storage);
+    }
+
     @Test
     public void testContactsRetrieving() {
         List<Contact> contactsToRetrieve = List.of(generateContact());
-        contactsService = new ContactsServiceImpl(storage);
         when(storage.isUserExistById(mockUserId)).thenReturn(true);
         when(storage.retrieveContacts(mockUserId)).thenReturn(contactsToRetrieve);
         StepVerifier.create(contactsService.retrieveContacts(mockUserId))
@@ -46,7 +52,6 @@ public class ContactsServiceTest extends BaseTest {
 
     @Test
     public void testContactsRetrievingOfNonExistingUser() {
-        contactsService = new ContactsServiceImpl(storage);
         when(storage.isUserExistById(mockUserId)).thenReturn(false);
         StepVerifier.create(contactsService.retrieveContacts(mockUserId))
             .expectError(IllegalArgumentException.class)
@@ -56,7 +61,6 @@ public class ContactsServiceTest extends BaseTest {
     @Test
     public void testContactsAdding() {
         Contact contactToAdd = generateContact();
-        contactsService = new ContactsServiceImpl(storage);
         when(storage.isUserExistById(mockUserId)).thenReturn(true);
         when(storage.saveContact(mockUserId, contactToAdd)).thenReturn(contactToAdd);
 
@@ -74,7 +78,6 @@ public class ContactsServiceTest extends BaseTest {
     @Test
     public void testContactsAddingToNonExistingUser() {
         Contact contactToAdd = generateContact();
-        contactsService = new ContactsServiceImpl(storage);
         when(storage.isUserExistById(mockUserId)).thenReturn(false);
 
         when(storage.saveContact(mockUserId, contactToAdd)).thenReturn(contactToAdd);
@@ -91,7 +94,6 @@ public class ContactsServiceTest extends BaseTest {
     @Test
     public void testContactsEditing() {
         Contact contactToEdit = generateContact();
-        contactsService = new ContactsServiceImpl(storage);
         when(storage.isUserExistById(mockUserId)).thenReturn(true);
         when(storage.hasContact(mockUserId, contactToEdit.getContactId())).thenReturn(true);
         when(storage.editContact(mockUserId, contactToEdit)).thenReturn(contactToEdit);
@@ -110,7 +112,6 @@ public class ContactsServiceTest extends BaseTest {
     @Test
     public void testContactsEditingOfNonExistingUser() {
         Contact contactToEdit = generateContact();
-        contactsService = new ContactsServiceImpl(storage);
         when(storage.isUserExistById(mockUserId)).thenReturn(false);
         when(storage.editContact(mockUserId, contactToEdit)).thenReturn(contactToEdit);
 
@@ -127,7 +128,6 @@ public class ContactsServiceTest extends BaseTest {
     @Test
     public void testContactsEditingOfNonExistingContact() {
         Contact contactToEdit = generateContact();
-        contactsService = new ContactsServiceImpl(storage);
         when(storage.isUserExistById(mockUserId)).thenReturn(true);
         when(storage.hasContact(mockUserId, contactToEdit.getContactId())).thenReturn(false);
         when(storage.editContact(mockUserId, contactToEdit)).thenReturn(contactToEdit);
