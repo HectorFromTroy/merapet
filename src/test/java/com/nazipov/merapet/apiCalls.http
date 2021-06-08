@@ -1,0 +1,16 @@
+# retrieveUsers
+GET http://localhost:8080/users/all HTTP/1.1
+
+###
+
+# createUser
+POST http://localhost:8080/users HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "vcbcvb",
+    "password": "123",
+    "email": "qwe@mail.ru",
+    "dateOfBirth": "2021-06-02T08:06:31.873Z",
+    "gender": "MALE"
+}

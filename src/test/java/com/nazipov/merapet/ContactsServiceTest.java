@@ -126,7 +126,7 @@ public class ContactsServiceTest extends BaseTest {
     }
 
     @Test
-    public void testContactsEditingOfNonExistingContact() {
+    public void testContactsEditingWithNonExistingContact() {
         Contact contactToEdit = generateContact();
         when(storage.isUserExistById(mockUserId)).thenReturn(true);
         when(storage.hasContact(mockUserId, contactToEdit.getContactId())).thenReturn(false);
@@ -138,6 +138,60 @@ public class ContactsServiceTest extends BaseTest {
 
         List<Contact> contactsToEdit = List.of(contactToEdit);
         StepVerifier.create(contactsService.editContacts(mockUserId, contactsToEdit))
+            .expectError(IllegalArgumentException.class)
+            .verify();
+    }
+
+    @Test
+    public void testContactsDeleting() {
+        Contact contactToDelete = generateContact();
+        String contactIdToDelete = contactToDelete.getContactId();
+        when(storage.isUserExistById(mockUserId)).thenReturn(true);
+        when(storage.hasContact(mockUserId, contactIdToDelete)).thenReturn(true);
+        when(storage.deleteContact(mockUserId, contactIdToDelete)).thenReturn(contactToDelete);
+
+        StepVerifier.create(contactsService.deleteContact(mockUserId, contactIdToDelete))
+            .assertNext(elem -> System.out.println("Next: " + elem))
+            .verifyComplete();
+
+        List<String> contactsToDelete = List.of(contactIdToDelete);
+        verify(storage, times(contactsToDelete.size())).deleteContact(eq(mockUserId), any(String.class));
+        StepVerifier.create(contactsService.deleteContacts(mockUserId, contactsToDelete))
+            .expectNextMatches(contacts -> contacts.size() == contactsToDelete.size())
+            .verifyComplete();
+    }
+
+    @Test
+    public void testContactsDeletingOfNonExistingUser() {
+        Contact contactToDelete = generateContact();
+        String contactIdToDelete = contactToDelete.getContactId();
+        when(storage.isUserExistById(mockUserId)).thenReturn(false);
+        when(storage.deleteContact(mockUserId, contactIdToDelete)).thenReturn(contactToDelete);
+
+        StepVerifier.create(contactsService.deleteContact(mockUserId, contactIdToDelete))
+            .expectError(IllegalArgumentException.class)
+            .verify();
+
+        List<String> contactsToDelete = List.of(contactIdToDelete);
+        StepVerifier.create(contactsService.deleteContacts(mockUserId, contactsToDelete))
+            .expectError(IllegalArgumentException.class)
+            .verify();
+    }
+
+    @Test
+    public void testContactsDeletingWithNonExistingContact() {
+        Contact contactToDelete = generateContact();
+        String contactIdToDelete = contactToDelete.getContactId();
+        when(storage.isUserExistById(mockUserId)).thenReturn(true);
+        when(storage.hasContact(mockUserId, contactToDelete.getContactId())).thenReturn(false);
+        when(storage.deleteContact(mockUserId, contactIdToDelete)).thenReturn(contactToDelete);
+
+        StepVerifier.create(contactsService.deleteContact(mockUserId, contactIdToDelete))
+            .expectError(IllegalArgumentException.class)
+            .verify();
+
+        List<String> contactsToDelete = List.of(contactIdToDelete);
+        StepVerifier.create(contactsService.deleteContacts(mockUserId, contactsToDelete))
             .expectError(IllegalArgumentException.class)
             .verify();
     }

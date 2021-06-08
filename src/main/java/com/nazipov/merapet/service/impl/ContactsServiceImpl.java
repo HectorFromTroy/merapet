@@ -103,9 +103,6 @@ public class ContactsServiceImpl implements ContactsService {
 
     @Override
     public Mono<List<Contact>> deleteContacts(String userId, List<String> contactIds) {
-        if (!storage.isUserExistById(userId)) {
-            return Mono.error(new IllegalArgumentException(String.format("There is no user: '%s'", userId)));
-        }
         return Flux.fromIterable(contactIds)
                 .flatMap(c -> deleteContact(userId, c))
                 .collectList()
