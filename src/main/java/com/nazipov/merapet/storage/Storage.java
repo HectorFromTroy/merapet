@@ -16,49 +16,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Storage {
-    
-    //private HashMap<String, HashMap<String, MyUser>> usersContacts = new HashMap<>();
 
     private HashMap<String, MyUser> allUsersById = new HashMap<>();
     private HashSet<String> usernames = new HashSet<>();
     // user owner id, contact id, contact
     private HashMap<String, HashMap<String, Contact>> userContacts = new HashMap<>();
-
-    Storage() {
-        // testing users and contacts
-        MyUser user = MyUser.builder()
-            .setUserId("123")
-            .setUsername("username")
-            .setEmail("qweqwe@mail.ru")
-            .setDateOfBirth(LocalDateTime.now())
-            .setPassword("password")
-            .setGender(Gender.FEMALE)
-            .build();
-        usernames.add(user.getUsername());
-        allUsersById.put(user.getUserId(), user);
-
-        MyUser contactUser = MyUser.builder()
-            .setUserId("456")
-            .setUsername("contact")
-            .setEmail("vcvbcvbcvb@mail.ru")
-            .setDateOfBirth(LocalDateTime.now())
-            .setPassword("vbbvbdvb")
-            .setGender(Gender.MALE)
-            .build();
-        usernames.add(contactUser.getUsername());
-        allUsersById.put(contactUser.getUserId(), contactUser);
-
-        Contact contact = Contact.builder()
-            .setContactId("123")
-            .setUserId(contactUser.getUserId())
-            .setName("my custom name for contact")
-            .build();
-        userContacts.computeIfAbsent(user.getUserId(), k -> new HashMap<>()).put(
-            contact.getContactId(), 
-            contact
-        );
-    }
-
 
     private String getUUID() {
         return UUID.randomUUID().toString();
